@@ -18,6 +18,43 @@
 <!-- shade finder section-->
 <section style="border:1px solid #ccc;padding:12px;margin:12px 0;">
   <h2>Find Your Perfect Shade</h2>
+    <label>Category:</label>
+  <select id="recCategory">
+    <option value="">-- pick --</option>
+    <option value="foundation">foundation</option>
+    <option value="lipstick">lipstick</option>
+  </select>
+
+  <label>Color family:</label>
+  <select id="recColor">
+    <option value="">-- pick color --</option>
+  </select>
+
+  <label>Finish:</label>
+  <select id="recFinish">
+    <option value="">-- any --</option>
+    <option value="Matte">Matte</option>
+    <option value="Glowy">Glowy</option>
+  </select>
+
+  <button>Recommend Shades</button>
+
+  <table border="1" cellpadding="6" style="margin-top:10px; border-collapse:collapse;">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Shade</th>
+        <th>Code</th>
+        <th>Finish</th>
+        <th>Color Family</th>
+        <th>Price</th>
+        <th>Save ♥</th>
+      </tr>
+    </thead>
+    <tbody id="recTableBody">
+      <tr><td colspan="7">shades will show here later</td></tr>
+    </tbody>
+  </table>
 </section>
 
 <!-- wishlist section-->
