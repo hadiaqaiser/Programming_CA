@@ -61,6 +61,25 @@
 <section style="border:1px solid #ccc;padding:12px;margin:12px 0;">
   <h2>My Wishlist (demo / future save)</h2>
   <p>Put ur email and shade u like. later backend will store in db.</p>
+  <input id="wishEmail" placeholder="you@example.com">
+  <input id="wishShadeId" placeholder="shade_id e.g. 7">
+  <input id="wishNote" placeholder="note e.g. for Eid look">
+  <button>Add (demo)</button>
+
+  <h3>Current Wishlist (frontend only)</h3>
+  <table border="1" cellpadding="6" style="border-collapse:collapse;">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Shade ID</th>
+        <th>Note</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody id="wishTableBody">
+      <tr><td colspan="4">wishlist item will show here</td></tr>
+    </tbody>
+  </table>
 </section>
 <!--javascript-->
 <script src="app.js"></script>
