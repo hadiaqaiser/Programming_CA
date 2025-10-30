@@ -12,3 +12,6 @@ mockShades.push(
   {product_name:"Medora Foundation", shade_name:"Cocoa", shade_code:"16", finish:"Glowy", color_family:"Dark", msrp:1200}
 );
 
+// just empty array now, later i will push wishlist items here
+let wishlistData = [];
+
