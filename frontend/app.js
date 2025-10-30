@@ -15,3 +15,38 @@ mockShades.push(
 // just empty array now, later i will push wishlist items here
 let wishlistData = [];
 
+
+// function for dropdown when user change category (foundation/lipstick)
+function updateColorOptions() {
+  const cat = document.getElementById("recCategory").value;
+  const colorSelect = document.getElementById("recColor");
+
+  // clear old options
+  colorSelect.innerHTML = "";
+
+  // default first option
+  const optBlank = document.createElement("option");
+  optBlank.value = "";
+  optBlank.textContent = "-- pick color --";
+  colorSelect.appendChild(optBlank);
+
+  // if category is foundation → show Light/Medium/Dark
+  if (cat === "foundation") {
+    ["Light", "Medium", "Dark"].forEach(fam => {
+      const o = document.createElement("option");
+      o.value = fam;
+      o.textContent = fam;
+      colorSelect.appendChild(o);
+    });
+  }
+
+  // if category is lipstick → show Red/Pink/Brown
+  if (cat === "lipstick") {
+    ["Red", "Pink", "Brown"].forEach(fam => {
+      const o = document.createElement("option");
+      o.value = fam;
+      o.textContent = fam;
+      colorSelect.appendChild(o);
+    });
+  }
+}
