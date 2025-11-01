@@ -153,4 +153,4 @@ function deleteWishlistRow(i){
 }
 
 function addToWishlistQuick(shadeName){
-  alert("saved " + shadeName + " to wishlist (frontend demo)");
+  alert("saved " + shadeName + " to wishlist (frontend demo)");}
