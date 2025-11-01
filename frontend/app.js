@@ -50,6 +50,47 @@ function updateColorOptions() {
   }
 }
 
+//add shade finder filter and table render js. working nice now
+//write this function with my own logic but used gpt for filter syntax idea
+function getRecs() {
+  const cat = document.getElementById("recCategory").value.trim();
+  const fam = document.getElementById("recColor").value.trim();
+  const fin = document.getElementById("recFinish").value.trim();
+
+  //filter check was confusing me so i used gpt for this
+  const result = mockShades.filter(s => {
+    const matchCat = !cat || s.product_name.toLowerCase().includes(cat);
+    const matchFam = !fam || s.color_family === fam;
+    const matchFin = !fin || s.finish === fin;
+    return matchCat && matchFam && matchFin;
+  });
+
+  const tbody = document.getElementById("recTableBody");
+  tbody.innerHTML = "";
+
+  if (result.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="7">no match found</td>`;
+    tbody.appendChild(tr);
+    return;
+  }
+
+  result.forEach(shade => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${shade.product_name}</td>
+      <td>${shade.shade_name}</td>
+      <td>${shade.shade_code}</td>
+      <td>${shade.finish}</td>
+      <td>${shade.color_family}</td>
+      <td>${shade.msrp}</td>
+      <td><button onclick="addToWishlistQuick('${shade.shade_name}')">♥</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+
 //add fake checkAuth() alert just to show idea of product verify
 function checkAuth() {
   const code = document.getElementById("batchInput").value.trim();
