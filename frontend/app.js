@@ -108,3 +108,49 @@ function checkAuth() {
     alert("cannot verify this batch code. maybe not real.");
   }
 }
+
+//wishlist added using local array, can add and delete items now
+function fakeAddWishlist(){
+  const email = document.getElementById("wishEmail").value.trim();
+  const shadeId = document.getElementById("wishShadeId").value.trim();
+  const note = document.getElementById("wishNote").value.trim();
+
+  if(!email || !shadeId){
+    alert("email and shade needed");
+    return;
+  }
+
+  wishlistData.push({ email, shadeId, note });
+  renderWishlistTable();
+}
+
+function renderWishlistTable(){
+  const tbody = document.getElementById("wishTableBody");
+  tbody.innerHTML = "";
+
+  if (wishlistData.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="4">wishlist empty</td>`;
+    tbody.appendChild(tr);
+    return;
+  }
+
+  wishlistData.forEach((row, index) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${row.email}</td>
+      <td>${row.shadeId}</td>
+      <td>${row.note || ""}</td>
+      <td><button onclick="deleteWishlistRow(${index})">X</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function deleteWishlistRow(i){
+  wishlistData.splice(i,1);
+  renderWishlistTable();
+}
+
+function addToWishlistQuick(shadeName){
+  alert("saved " + shadeName + " to wishlist (frontend demo)");
