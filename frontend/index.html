@@ -9,10 +9,6 @@
   <p>type batch code from box or sticker. (demo only right now)</p>
     <input id="batchInput" placeholder="e.g. MED-LIP-21-2307">
   <button>Check</button>
-
-  <div style="margin-top:12px; border:1px solid #ddd; padding:10px;">
-    <p><b>Result will show here later</b></p>
-  </div>
 </section>
 
 <!-- shade finder section-->
@@ -37,7 +33,7 @@
     <option value="Glowy">Glowy</option>
   </select>
 
-  <button>Recommend Shades</button>
+  <button onclick="getRecs()">Recommend Shades</button>
 
   <table border="1" cellpadding="6" style="margin-top:10px; border-collapse:collapse;">
     <thead>
@@ -64,7 +60,7 @@
   <input id="wishEmail" placeholder="you@example.com">
   <input id="wishShadeId" placeholder="shade_id e.g. 7">
   <input id="wishNote" placeholder="note e.g. for Eid look">
-  <button>Add (demo)</button>
+  <button onclick="fakeAddWishlist()">Add (demo)</button>
 
   <h3>Current Wishlist (frontend only)</h3>
   <table border="1" cellpadding="6" style="border-collapse:collapse;">
