@@ -49,3 +49,21 @@ function updateColorOptions() {
     });
   }
 }
+
+//add fake checkAuth() alert just to show idea of product verify
+function checkAuth() {
+  const code = document.getElementById("batchInput").value.trim();
+
+  if (!code) {
+    alert("please type batch code first");
+    return;
+  }
+
+  if (code === "MED-LIP-21-2307") {
+    alert(
+      "Authentic ✅\nProduct: Medora Lipstick\nShade: Cherry\nFinish: Matte\nColor Family: Red\nMfg: 2023-07-22\nExpiry: 2026-07-22\nStatus: Passed"
+    );
+  } else {
+    alert("cannot verify this batch code. maybe not real.");
+  }
+}
