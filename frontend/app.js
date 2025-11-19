@@ -1,6 +1,6 @@
 const API = "http://127.0.0.1:5001";
 
-//getRecs using real backend api
+//shade finder that calls backend /api/shades instead of local mockShades
 async function getRecs() {
   const cat = document.getElementById("recCategory").value.trim();
   const fam = document.getElementById("recColor").value.trim();
@@ -31,7 +31,7 @@ async function getRecs() {
       return;
     }
 
-    // same table structure as before, just using data from backend now
+    // using data from backend
     data.forEach(shade => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
@@ -45,7 +45,7 @@ async function getRecs() {
       `;
       tbody.appendChild(tr);
     });
-  } catch (err)
+  } catch (err) {
     console.error(err);
     tbody.innerHTML = `<tr><td colspan="7">error talking to backend</td></tr>`;
   }
