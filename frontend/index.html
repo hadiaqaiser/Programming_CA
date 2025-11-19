@@ -9,6 +9,25 @@
   <p>type batch code from box or sticker. (demo only right now)</p>
     <input id="batchInput" placeholder="e.g. MED-LIP-21-2307">
 <button onclick="checkAuth()">Check</button>
+  <div id="authArea" style="margin-top:12px; border:1px solid #ddd; padding:10px; display:none;">
+    <p id="authStatusText" style="font-weight:bold;"></p>
+    <table border="1" cellpadding="6" style="margin-top:10px; border-collapse:collapse;">
+      <tbody>
+        <tr><th>Product</th><td id="authProductCell"></td></tr>
+        <tr><th>Shade Name</th><td id="authShadeCell"></td></tr>
+        <tr><th>Finish</th><td id="authFinishCell"></td></tr>
+        <tr><th>Color Family</th><td id="authFamilyCell"></td></tr>
+        <tr><th>Batch Code</th><td id="authBatchCell"></td></tr>
+        <tr><th>Manufactured</th><td id="authMfgCell"></td></tr>
+        <tr><th>Expiry</th><td id="authExpiryCell"></td></tr>
+        <tr><th>Quality Status</th><td id="authQualityCell"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="authError" style="margin-top:12px; color:#b00000; font-weight:bold; display:none;">
+    Could not verify this batch code. This product may not be genuine.
+  </div>
 </section>
 
 <!-- shade finder section-->
