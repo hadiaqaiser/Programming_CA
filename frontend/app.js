@@ -1,3 +1,4 @@
+const API = "http://127.0.0.1:5001";
 // start small data, just lipstick shades for test
 const mockShades = [
   {product_name:"Medora Lipstick", shade_name:"Cherry", shade_code:"21", finish:"Matte", color_family:"Red", msrp:450},
