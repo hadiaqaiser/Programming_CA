@@ -1,3 +1,7 @@
+# fix python path so pytest can import backend module
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 # simple pytest test for my first flask route /api/ping
 import pytest
 from backend.app import app
