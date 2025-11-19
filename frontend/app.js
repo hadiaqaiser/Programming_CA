@@ -1,17 +1,55 @@
 const API = "http://127.0.0.1:5001";
-// start small data, just lipstick shades for test
-const mockShades = [
-  {product_name:"Medora Lipstick", shade_name:"Cherry", shade_code:"21", finish:"Matte", color_family:"Red", msrp:450},
-  {product_name:"Medora Lipstick", shade_name:"Rose", shade_code:"22", finish:"Glowy", color_family:"Pink", msrp:450},
-  {product_name:"Medora Lipstick", shade_name:"Rust", shade_code:"23", finish:"Matte", color_family:"Brown", msrp:450},
-];
 
-// addin foundation product too, so i can test category later
-mockShades.push(
-  {product_name:"Medora Foundation", shade_name:"Ivory", shade_code:"11", finish:"Matte", color_family:"Light", msrp:1200},
-  {product_name:"Medora Foundation", shade_name:"Honey", shade_code:"14", finish:"Glowy", color_family:"Medium", msrp:1200},
-  {product_name:"Medora Foundation", shade_name:"Cocoa", shade_code:"16", finish:"Glowy", color_family:"Dark", msrp:1200}
-);
+//getRecs using real backend api
+async function getRecs() {
+  const cat = document.getElementById("recCategory").value.trim();
+  const fam = document.getElementById("recColor").value.trim();
+  const fin = document.getElementById("recFinish").value.trim();
+
+  // build query string same way as ca2
+  const params = new URLSearchParams();
+  if (cat) params.append("category", cat);
+  if (fam) params.append("color_family", fam);
+  if (fin) params.append("finish", fin);
+
+  const tbody = document.getElementById("recTableBody");
+  tbody.innerHTML = `<tr><td colspan="7">loading shades…</td></tr>`;
+
+  try {
+    const res = await fetch(`${API}/api/shades?` + params.toString());
+    if (!res.ok) {
+      throw new Error("backend problem " + res.status);
+    }
+    const data = await res.json();
+
+    tbody.innerHTML = "";
+
+    if (!data || data.length === 0) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="7">no match found</td>`;
+      tbody.appendChild(tr);
+      return;
+    }
+
+    // same table structure as before, just using data from backend now
+    data.forEach(shade => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${shade.product_name}</td>
+        <td>${shade.shade_name}</td>
+        <td>${shade.shade_code}</td>
+        <td>${shade.finish}</td>
+        <td>${shade.color_family}</td>
+        <td>${shade.msrp}</td>
+        <td><button class="btn btn-secondary" onclick="addToWishlistQuick('${shade.shade_name}')">♥</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err)
+    console.error(err);
+    tbody.innerHTML = `<tr><td colspan="7">error talking to backend</td></tr>`;
+  }
+}
 
 // just empty array now, later i will push wishlist items here
 let wishlistData = [];
@@ -50,47 +88,6 @@ function updateColorOptions() {
     });
   }
 }
-
-//add shade finder filter and table render js. working nice now
-//write this function with my own logic but used gpt for filter syntax idea
-function getRecs() {
-  const cat = document.getElementById("recCategory").value.trim();
-  const fam = document.getElementById("recColor").value.trim();
-  const fin = document.getElementById("recFinish").value.trim();
-
-  //filter check was confusing me so i used gpt for this
-  const result = mockShades.filter(s => {
-    const matchCat = !cat || s.product_name.toLowerCase().includes(cat);
-    const matchFam = !fam || s.color_family === fam;
-    const matchFin = !fin || s.finish === fin;
-    return matchCat && matchFam && matchFin;
-  });
-
-  const tbody = document.getElementById("recTableBody");
-  tbody.innerHTML = "";
-
-  if (result.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="7">no match found</td>`;
-    tbody.appendChild(tr);
-    return;
-  }
-
-  result.forEach(shade => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${shade.product_name}</td>
-      <td>${shade.shade_name}</td>
-      <td>${shade.shade_code}</td>
-      <td>${shade.finish}</td>
-      <td>${shade.color_family}</td>
-      <td>${shade.msrp}</td>
-      <td><button onclick="addToWishlistQuick('${shade.shade_name}')">♥</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
 
 //CheckAuth using Flask Api
 async function checkAuth() {
