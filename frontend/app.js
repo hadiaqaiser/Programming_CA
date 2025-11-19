@@ -91,22 +91,48 @@ function getRecs() {
 }
 
 
-//add fake checkAuth() alert just to show idea of product verify
-function checkAuth() {
+//CheckAuth using Flask Api
+async function checkAuth() {
   const code = document.getElementById("batchInput").value.trim();
 
+  const authArea = document.getElementById("authArea");
+  const authError = document.getElementById("authError");
+  const statusText = document.getElementById("authStatusText");
+
+  // hide old stuff
+  authArea.style.display = "none";
+  authError.style.display = "none";
+
   if (!code) {
-    alert("please type batch code first");
+    alert("Please enter a batch code");
     return;
   }
 
-  if (code === "MED-LIP-21-2307") {
-    alert(
-      "Authentic ✅\nProduct: Medora Lipstick\nShade: Cherry\nFinish: Matte\nColor Family: Red\nMfg: 2023-07-22\nExpiry: 2026-07-22\nStatus: Passed"
-    );
-  } else {
-    alert("cannot verify this batch code. maybe not real.");
+  const res = await fetch(`${API}/api/auth/check?batch_code=${encodeURIComponent(code)}`);
+  const data = await res.json();
+
+  if (!data.authentic) {
+    authError.style.display = "block";
+    return;
   }
+
+  // writing all results in table
+  const shade = data.shade_info || {};
+  const batch = data.batch_info || {};
+
+  statusText.textContent = `Result: ${data.status}`;
+
+  document.getElementById("authProductCell").textContent = data.product_name;
+  document.getElementById("authShadeCell").textContent = shade.shade_name;
+  document.getElementById("authFinishCell").textContent = shade.finish;
+  document.getElementById("authFamilyCell").textContent = shade.color_family;
+
+  document.getElementById("authBatchCell").textContent = batch.batch_code;
+  document.getElementById("authMfgCell").textContent = batch.mfg_date;
+  document.getElementById("authExpiryCell").textContent = batch.expiry_date;
+  document.getElementById("authQualityCell").textContent = batch.status;
+
+  authArea.style.display = "block";
 }
 
 //wishlist added using local array, can add and delete items now
