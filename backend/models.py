@@ -14,3 +14,4 @@ class Product(Base):
     def __repr__(self) -> str:
         # small helper so if i print(product) it look nice
         return f"<Product id={self.id} name={self.name!r} category={self.category!r}>"
+    
