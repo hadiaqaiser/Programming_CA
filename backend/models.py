@@ -31,3 +31,22 @@ class Shade(Base):
 
     def __repr__(self) -> str:
         return f"<Shade id={self.id} code={self.shade_code!r} name={self.shade_name!r}>"
+    
+
+# what: create batch table model to store batch code mfg expiry and quality status for each shade
+# source: i used chatgpt for choosing string length and nullable flags but idea comes from my project design
+
+class Batch(Base):
+    __tablename__ = "batches"
+
+    id = Column(Integer, primary_key=True, index=True)
+    # each batch belongs to one shade
+    shade_id = Column(Integer, ForeignKey("shades.id"), nullable=False)
+
+    batch_code = Column(String(50), nullable=False)
+    mfg_date = Column(String(10), nullable=False)      # e.g. "2023-07-05"
+    expiry_date = Column(String(10), nullable=False)   # e.g. "2026-07-05"
+    status = Column(String(20), nullable=False)        # e.g. "Passed", "Failed", "Expired"
+
+    def __repr__(self) -> str:
+        return f"<Batch id={self.id} code={self.batch_code!r} status={self.status!r}>"
