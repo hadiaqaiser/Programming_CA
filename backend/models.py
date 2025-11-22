@@ -67,3 +67,18 @@ class WishlistItem(Base):
 
     def __repr__(self) -> str:
         return f"<WishlistItem id={self.id} shade_id={self.shade_id} email={self.email!r}>"
+    
+# create review table so user can leave rating and comment for a shade using email
+class Review(Base):
+    __tablename__ = "reviews"
+
+    id = Column(Integer, primary_key=True, index=True)
+    # which shade user is reviewing
+    shade_id = Column(Integer, ForeignKey("shades.id"), nullable=False)
+
+    email = Column(String(120), nullable=False)
+    rating = Column(Integer, nullable=False)        # 1–5 stars
+    comment = Column(String(500), nullable=True)    # small free text feedback
+
+    def __repr__(self) -> str:
+        return f"<Review id={self.id} shade_id={self.shade_id} rating={self.rating}>"
