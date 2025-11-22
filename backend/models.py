@@ -33,7 +33,7 @@ class Shade(Base):
         return f"<Shade id={self.id} code={self.shade_code!r} name={self.shade_name!r}>"
     
 
-# what: create batch table model to store batch code mfg expiry and quality status for each shade
+# create batch table model to store batch code mfg expiry and quality status for each shade
 # source: i used chatgpt for choosing string length and nullable flags but idea comes from my project design
 
 class Batch(Base):
@@ -50,3 +50,20 @@ class Batch(Base):
 
     def __repr__(self) -> str:
         return f"<Batch id={self.id} code={self.batch_code!r} status={self.status!r}>"
+    
+# create wishlist table so user can save shades they like with email and note
+
+class WishlistItem(Base):
+    __tablename__ = "wishlist_items"
+
+    id = Column(Integer, primary_key=True, index=True)
+    # which shade user liked
+    shade_id = Column(Integer, ForeignKey("shades.id"), nullable=False)
+
+    # who saved it (no auth, just email text for now)
+    email = Column(String(120), nullable=False)
+    # small note like "for eid look"
+    note = Column(String(255), nullable=True)
+
+    def __repr__(self) -> str:
+        return f"<WishlistItem id={self.id} shade_id={self.shade_id} email={self.email!r}>"
