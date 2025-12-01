@@ -134,6 +134,38 @@ def check_batch():
     finally:
         session.close()
 
+# small api to list all wishlist rows so later my frontend can show them from real db
+# source: used basic sqlalchemy query pattern from https://docs.sqlalchemy.org/en/20/orm/quickstart.html#simple-select
+
+
+@app.get("/api/wishlist")
+def get_wishlist():
+    session = get_session()
+    try:
+        # join wishlist with shades so i can show shade_code + name
+        rows = (
+            session
+            .query(models.WishlistItem, models.Shade)
+            .join(models.Shade, models.WishlistItem.shade_id == models.Shade.id)
+            .all()
+        )
+
+        result = []
+        for item, shade in rows:
+            result.append(
+                {
+                    "id": item.id,
+                    "email": item.email,
+                    "note": item.note,
+                    "shade_id": item.shade_id,
+                    "shade_code": shade.shade_code,
+                    "shade_name": shade.shade_name,
+                }
+            )
+        return jsonify(result)
+    finally:
+        session.close()
+
 
 # this only runs if i do: python app.py (optional)
 if __name__ == "__main__":
