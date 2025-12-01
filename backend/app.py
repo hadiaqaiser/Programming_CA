@@ -166,6 +166,51 @@ def get_wishlist():
     finally:
         session.close()
 
+# this api takes email + shade_id + note from frontend and creates a new wishlist row
+# source: followed flask json pattern from https://flask.palletsprojects.com/en/3.0.x/api/#flask.Request.get_json
+
+
+@app.post("/api/wishlist")
+def create_wishlist_item():
+    data = request.get_json(silent=True) or {}
+
+    email = (data.get("email") or "").strip()
+    shade_id = data.get("shade_id")
+    note = (data.get("note") or "").strip()
+
+    # tiny validation so db does not get junk
+    if not email or not shade_id:
+        return jsonify({"error": "email and shade_id are required"}), 400
+
+    session = get_session()
+    try:
+        # make sure shade exists before saving
+        shade = session.query(models.Shade).get(shade_id)
+        if shade is None:
+            return jsonify({"error": "shade not found"}), 404
+
+        item = models.WishlistItem(
+            email=email,
+            shade_id=shade_id,
+            note=note or None,
+        )
+        session.add(item)
+        session.commit()
+
+        return jsonify(
+            {
+                "id": item.id,
+                "email": item.email,
+                "shade_id": item.shade_id,
+                "note": item.note,
+            }
+        ), 201
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
 
 # this only runs if i do: python app.py (optional)
 if __name__ == "__main__":
