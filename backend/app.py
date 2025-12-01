@@ -277,6 +277,24 @@ def create_review():
     finally:
         session.close()
 
+# allow frontend to delete a wishlist row by id so table and sqlite stay in sync
+# source: based on flask route docs + simple session delete pattern from SQLAlchemy docs https://flask.palletsprojects.com/en/latest/quickstart/#routing SQLAlchemy delete: https://docs.sqlalchemy.org/en/20/orm/session_basics.html#deleting
+
+
+@app.delete("/api/wishlist/<int:item_id>")
+def delete_wishlist(item_id):
+    session = get_session()
+    try:
+        item = session.query(models.WishlistItem).get(item_id)
+        if item is None:
+            return jsonify({"error": "wishlist item not found"}), 404
+
+        session.delete(item)
+        session.commit()
+        return jsonify({"deleted": True, "id": item_id})
+    finally:
+        session.close()
+
 
 # this only runs if i do: python app.py (optional)
 if __name__ == "__main__":
