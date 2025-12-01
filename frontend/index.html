@@ -13,7 +13,7 @@
   <!-- authenticity section -->
   <section class="card">
     <h2>Check Your Product Authenticity</h2>
-    <p>type batch code from box or sticker. (demo only right now)</p>
+    <p>type batch code of product</p>
     <input class="input-text" id="batchInput" placeholder="e.g. MED-LIP-21-2307">
     <button class="btn btn-primary" onclick="checkAuth()">Check</button>
     <div id="authArea" style="margin-top:12px; border:1px solid #ddd; padding:10px; display:none;">
@@ -63,6 +63,7 @@
 
   <!-- shade finder section-->
   <section class="card">
+    <h2>Choose Your Product</h2>
     <label>Category:</label>
     <select class="input-text" id="recCategory" onchange="updateColorOptions()">
       <option value="">-- pick --</option>
@@ -98,7 +99,7 @@
       </thead>
       <tbody id="recTableBody">
         <tr>
-          <td colspan="7">shades will show here later</td>
+          <td colspan="7">shades will show here</td>
         </tr>
       </tbody>
     </table>
@@ -106,14 +107,14 @@
 
   <!-- wishlist section-->
   <section class="card">
-    <h2>My Wishlist (demo / future save)</h2>
-    <p>Put ur email and shade u like. later backend will store in db.</p>
+    <h2>My Wishlist</h2>
+    <p>Put ur email and shade u like</p>
     <input class="input-text" id="wishEmail" placeholder="you@example.com">
     <input class="input-text" id="wishShadeId" placeholder="shade_id e.g. 7">
     <input class="input-text" id="wishNote" placeholder="note e.g. for Eid look">
     <button class="btn btn-primary" onclick="fakeAddWishlist()">Add (demo)</button>
 
-    <h3>Current Wishlist (frontend only)</h3>
+    <h3>Current Wishlist</h3>
     <table border="1" cellpadding="6" style="border-collapse:collapse;">
       <thead>
         <tr>
@@ -133,9 +134,8 @@
 
   <!-- new section so user can see and add reviews for any shade (uses backend /api/reviews api) -->
   <section class="card">
-    <h2>Shade Reviews (demo)</h2>
-    <p>type shade id to see or add reviews. (later i can connect directly from shade table).</p>
-
+    <h2>Shade Reviews</h2>
+    <p>type shade id to see or add reviews</p>
     <div style="margin-bottom:8px;">
       <label>Shade ID:</label>
       <input class="input-text" id="reviewShadeId" placeholder="e.g. 21" style="width:80px;">
