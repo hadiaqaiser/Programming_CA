@@ -212,9 +212,8 @@ def create_wishlist_item():
         session.close()
 
 
-# explanation: this endpoint returns all reviews filtered by shade_id so frontend can show feedback for each shade
+# this endpoint returns all reviews filtered by shade_id so frontend can show feedback for each shade
 # source: used SQLAlchemy basic filter pattern from docs https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html
-# commit msg: add GET api for listing reviews by shade_id
 
 @app.get("/api/reviews")
 def list_reviews():
