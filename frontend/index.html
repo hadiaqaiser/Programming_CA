@@ -1,177 +1,188 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>Medora - Product Authenticity and Shade Finder System</title>
-<h1>Medora - Product Authenticity and Shade Finder System</h1>
+<html lang="en">
 
-<!-- authenticity section -->
-<section style="border:1px solid #ccc;padding:12px;margin:12px 0;">
-  <h2>Check Your Product Authenticity</h2>
-  <p>type batch code from box or sticker. (demo only right now)</p>
-  <input id="batchInput" placeholder="e.g. MED-LIP-21-2307">
-  <button onclick="checkAuth()">Check</button>
-  <div id="authArea" style="margin-top:12px; border:1px solid #ddd; padding:10px; display:none;">
-    <p id="authStatusText" style="font-weight:bold;"></p>
+<head>
+  <meta charset="utf-8">
+  <title>Medora - Product Authenticity and Shade Finder System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="page">
+
+  <h1 class="page-title">Medora - Product Authenticity and Shade Finder System</h1>
+  <!-- authenticity section -->
+  <section class="card">
+    <h2>Check Your Product Authenticity</h2>
+    <p>type batch code from box or sticker. (demo only right now)</p>
+    <input class="input-text" id="batchInput" placeholder="e.g. MED-LIP-21-2307">
+    <button class="btn btn-primary" onclick="checkAuth()">Check</button>
+    <div id="authArea" style="margin-top:12px; border:1px solid #ddd; padding:10px; display:none;">
+      <p id="authStatusText" style="font-weight:bold;"></p>
+      <table border="1" cellpadding="6" style="margin-top:10px; border-collapse:collapse;">
+        <tbody>
+          <tr>
+            <th>Product</th>
+            <td id="authProductCell"></td>
+          </tr>
+          <tr>
+            <th>Shade Name</th>
+            <td id="authShadeCell"></td>
+          </tr>
+          <tr>
+            <th>Finish</th>
+            <td id="authFinishCell"></td>
+          </tr>
+          <tr>
+            <th>Color Family</th>
+            <td id="authFamilyCell"></td>
+          </tr>
+          <tr>
+            <th>Batch Code</th>
+            <td id="authBatchCell"></td>
+          </tr>
+          <tr>
+            <th>Manufactured</th>
+            <td id="authMfgCell"></td>
+          </tr>
+          <tr>
+            <th>Expiry</th>
+            <td id="authExpiryCell"></td>
+          </tr>
+          <tr>
+            <th>Quality Status</th>
+            <td id="authQualityCell"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="authError" style="margin-top:12px; color:#b00000; font-weight:bold; display:none;">
+      Could not verify this batch code. This product may not be genuine.
+    </div>
+  </section>
+
+  <!-- shade finder section-->
+  <section class="card">
+    <label>Category:</label>
+    <select class="input-text" id="recCategory" onchange="updateColorOptions()">
+      <option value="">-- pick --</option>
+      <option value="foundation">foundation</option>
+      <option value="lipstick">lipstick</option>
+    </select>
+
+    <label>Color family:</label>
+    <select class="input-text" id="recColor">
+      <option value="">-- pick color --</option>
+    </select>
+
+    <label>Finish:</label>
+    <select class="input-text" id="recFinish">
+      <option value="">-- any --</option>
+      <option value="Matte">Matte</option>
+      <option value="Glowy">Glowy</option>
+    </select>
+
+    <button class="btn btn-primary" onclick="getRecs()">Recommend Shades</button>
+
     <table border="1" cellpadding="6" style="margin-top:10px; border-collapse:collapse;">
-      <tbody>
+      <thead>
         <tr>
           <th>Product</th>
-          <td id="authProductCell"></td>
-        </tr>
-        <tr>
-          <th>Shade Name</th>
-          <td id="authShadeCell"></td>
-        </tr>
-        <tr>
+          <th>Shade</th>
+          <th>Code</th>
           <th>Finish</th>
-          <td id="authFinishCell"></td>
-        </tr>
-        <tr>
           <th>Color Family</th>
-          <td id="authFamilyCell"></td>
+          <th>Price</th>
+          <th>Save ♥</th>
         </tr>
+      </thead>
+      <tbody id="recTableBody">
         <tr>
-          <th>Batch Code</th>
-          <td id="authBatchCell"></td>
-        </tr>
-        <tr>
-          <th>Manufactured</th>
-          <td id="authMfgCell"></td>
-        </tr>
-        <tr>
-          <th>Expiry</th>
-          <td id="authExpiryCell"></td>
-        </tr>
-        <tr>
-          <th>Quality Status</th>
-          <td id="authQualityCell"></td>
+          <td colspan="7">shades will show here later</td>
         </tr>
       </tbody>
     </table>
-  </div>
+  </section>
 
-  <div id="authError" style="margin-top:12px; color:#b00000; font-weight:bold; display:none;">
-    Could not verify this batch code. This product may not be genuine.
-  </div>
-</section>
+  <!-- wishlist section-->
+  <section class="card">
+    <h2>My Wishlist (demo / future save)</h2>
+    <p>Put ur email and shade u like. later backend will store in db.</p>
+    <input class="input-text" id="wishEmail" placeholder="you@example.com">
+    <input class="input-text" id="wishShadeId" placeholder="shade_id e.g. 7">
+    <input class="input-text" id="wishNote" placeholder="note e.g. for Eid look">
+    <button class="btn btn-primary" onclick="fakeAddWishlist()">Add (demo)</button>
 
-<!-- shade finder section-->
-<section style="border:1px solid #ccc;padding:12px;margin:12px 0;">
-  <h2>Find Your Perfect Shade</h2>
-  <label>Category:</label>
-  <select id="recCategory" onchange="updateColorOptions()">
-    <option value="">-- pick --</option>
-    <option value="foundation">foundation</option>
-    <option value="lipstick">lipstick</option>
-  </select>
+    <h3>Current Wishlist (frontend only)</h3>
+    <table border="1" cellpadding="6" style="border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Shade ID</th>
+          <th>Note</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody id="wishTableBody">
+        <tr>
+          <td colspan="4">wishlist item will show here</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-  <label>Color family:</label>
-  <select id="recColor">
-    <option value="">-- pick color --</option>
-  </select>
+  <!-- new section so user can see and add reviews for any shade (uses backend /api/reviews api) -->
+  <section class="card">
+    <h2>Shade Reviews (demo)</h2>
+    <p>type shade id to see or add reviews. (later i can connect directly from shade table).</p>
 
-  <label>Finish:</label>
-  <select id="recFinish">
-    <option value="">-- any --</option>
-    <option value="Matte">Matte</option>
-    <option value="Glowy">Glowy</option>
-  </select>
+    <div style="margin-bottom:8px;">
+      <label>Shade ID:</label>
+      <input class="input-text" id="reviewShadeId" placeholder="e.g. 21" style="width:80px;">
+      <button class="btn btn-primary" onclick="loadReviewsForShade()">Load reviews</button>
+    </div>
 
-  <button onclick="getRecs()">Recommend Shades</button>
+    <div style="margin-bottom:8px;">
+      <label>Your email:</label>
+      <input class="input-text" id="reviewEmail" placeholder="you@example.com">
 
-  <table border="1" cellpadding="6" style="margin-top:10px; border-collapse:collapse;">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Shade</th>
-        <th>Code</th>
-        <th>Finish</th>
-        <th>Color Family</th>
-        <th>Price</th>
-        <th>Save ♥</th>
-      </tr>
-    </thead>
-    <tbody id="recTableBody">
-      <tr>
-        <td colspan="7">shades will show here later</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+      <label style="margin-left:8px;">Rating:</label>
+      <select class="input-text" id="reviewRating">
+        <option value="">-- pick --</option>
+        <option value="1">1 ⭐</option>
+        <option value="2">2 ⭐</option>
+        <option value="3">3 ⭐</option>
+        <option value="4">4 ⭐</option>
+        <option value="5">5 ⭐</option>
+      </select>
+    </div>
 
-<!-- wishlist section-->
-<section style="border:1px solid #ccc;padding:12px;margin:12px 0;">
-  <h2>My Wishlist (demo / future save)</h2>
-  <p>Put ur email and shade u like. later backend will store in db.</p>
-  <input id="wishEmail" placeholder="you@example.com">
-  <input id="wishShadeId" placeholder="shade_id e.g. 7">
-  <input id="wishNote" placeholder="note e.g. for Eid look">
-  <button onclick="fakeAddWishlist()">Add (demo)</button>
+    <div style="margin-bottom:8px;">
+      <label>Comment:</label>
+      <input class="input-text" id="reviewComment" placeholder="write small feedback" style="width:260px;">
+      <button class="btn btn-primary" onclick="submitReview()">Add review</button>
+    </div>
 
-  <h3>Current Wishlist (frontend only)</h3>
-  <table border="1" cellpadding="6" style="border-collapse:collapse;">
-    <thead>
-      <tr>
-        <th>Email</th>
-        <th>Shade ID</th>
-        <th>Note</th>
-        <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody id="wishTableBody">
-      <tr>
-        <td colspan="4">wishlist item will show here</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+    <h3>Reviews for this shade</h3>
+    <table border="1" cellpadding="6" style="border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Rating</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody id="reviewTableBody">
+        <tr>
+          <td colspan="3">no reviews loaded yet</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-<!-- new section so user can see and add reviews for any shade (uses backend /api/reviews api) -->
-<section style="border:1px solid #ccc;padding:12px;margin:12px 0;">
-  <h2>Shade Reviews (demo)</h2>
-  <p>type shade id to see or add reviews. (later i can connect directly from shade table).</p>
+  <!--javascript-->
+  <script src="app.js"></script>
 
-  <div style="margin-bottom:8px;">
-    <label>Shade ID:</label>
-    <input id="reviewShadeId" placeholder="e.g. 21" style="width:80px;">
-    <button onclick="loadReviewsForShade()">Load reviews</button>
-  </div>
+</body>
 
-  <div style="margin-bottom:8px;">
-    <label>Your email:</label>
-    <input id="reviewEmail" placeholder="you@example.com">
-
-    <label style="margin-left:8px;">Rating:</label>
-    <select id="reviewRating">
-      <option value="">-- pick --</option>
-      <option value="1">1 ⭐</option>
-      <option value="2">2 ⭐</option>
-      <option value="3">3 ⭐</option>
-      <option value="4">4 ⭐</option>
-      <option value="5">5 ⭐</option>
-    </select>
-  </div>
-
-  <div style="margin-bottom:8px;">
-    <label>Comment:</label>
-    <input id="reviewComment" placeholder="write small feedback" style="width:260px;">
-    <button onclick="submitReview()">Add review</button>
-  </div>
-
-  <h3>Reviews for this shade</h3>
-  <table border="1" cellpadding="6" style="border-collapse:collapse;">
-    <thead>
-      <tr>
-        <th>Email</th>
-        <th>Rating</th>
-        <th>Comment</th>
-      </tr>
-    </thead>
-    <tbody id="reviewTableBody">
-      <tr>
-        <td colspan="3">no reviews loaded yet</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
-<!--javascript-->
-<script src="app.js"></script>
+</html>
