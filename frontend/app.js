@@ -281,7 +281,6 @@ function addToWishlistQuick(shadeName) {
 
 // sends a new review to flask backend and reloads review table
 // source: mdn fetch POST json example
-
 async function submitReview() {
   const shadeId = document.getElementById("reviewShadeId").value.trim();
   const email = document.getElementById("reviewEmail").value.trim();
@@ -324,9 +323,29 @@ async function submitReview() {
   }
 }
 
+// renders review table using the reviewData array
+// source: basic DOM table update using innerHTML loop
+function renderReviewTable() {
+  const tbody = document.getElementById("reviewTableBody");
+  tbody.innerHTML = "";
 
+  if (reviewData.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="3">no reviews loaded yet</td>`;
+    tbody.appendChild(tr);
+    return;
+  }
 
-
+  reviewData.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${r.email}</td>
+      <td>${r.rating}</td>
+      <td>${r.comment}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
 
 // this makes sure my wishlist data is loaded as soon as html is ready so table is not empty when student opens MedoraCare page.
 // source: using DOMContentLoaded from MDN event docs: https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event
