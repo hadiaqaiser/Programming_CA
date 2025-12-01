@@ -165,13 +165,15 @@ async function fakeAddWishlist() {
 
     const saved = await res.json();
 
-    // keep local array in sync with db
-    wishlistData.push({
-      email: saved.email,
-      shadeId: saved.shade_id,
-      note: saved.note || "",
-    });
-    renderWishlistTable();
+    // after saving wishlist item in flask api, i reload full list from backend so table always matches sqlite db, not just my local array
+    // source: i followed MDN fetch GET example idea and reused my own loadWishlistFromApi() helper → https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+    await loadWishlistFromApi();  // pull fresh wishlist rows from backend
+
+    // clear inputs for nicer UX
+    document.getElementById("wishEmail").value = "";
+    document.getElementById("wishShadeId").value = "";
+    document.getElementById("wishNote").value = "";
 
     // clear inputs for nicer UX
     document.getElementById("wishEmail").value = "";
