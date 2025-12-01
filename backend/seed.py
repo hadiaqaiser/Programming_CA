@@ -142,3 +142,9 @@ def seed():
         raise
     finally:
         session.close()
+
+
+# This allow me to run seeding easily with `python -m backend.seed`
+# ref: https://docs.python.org/3/library/__main__.html
+if __name__ == "__main__":
+    seed()
