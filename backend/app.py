@@ -1,6 +1,11 @@
 # start small flask app for medoracare project, only add simple /api/ping
 
 from flask import Flask, jsonify
+from flask_cors import CORS
+
+# import my shared db things (engine + Base) and models so tables can be created once
+from backend.db import engine, Base
+from backend import models  # just import so models register with Base
 
 # create main flask application
 app = Flask(__name__)
