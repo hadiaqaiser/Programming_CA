@@ -84,9 +84,58 @@ def seed():
         session.add_all(shades)
         session.flush()
 
-        # adds seed data for wishlist + reviews tables
-        # reference: i followed SQLAlchemy "add objects" example (https://docs.sqlalchemy.org/en/20/orm/session_basics.html#adding-and-updating-objects)
+        # helper to find shade by code quickly
+        code_to_shade = {s.shade_code: s for s in shades}
 
+        # batches (at least one per shade, special one for MED-LIP-21-2307)
+        batches = [
+            models.Batch(
+                shade_id=code_to_shade["21"].id,
+                batch_code="MED-LIP-21-2307",
+                mfg_date="2023-07-22",
+                expiry_date="2026-07-22",
+                status="Passed",
+            ),
+            models.Batch(
+                shade_id=code_to_shade["22"].id,
+                batch_code="MED-LIP-22-2308",
+                mfg_date="2023-08-10",
+                expiry_date="2026-08-10",
+                status="Passed",
+            ),
+            models.Batch(
+                shade_id=code_to_shade["23"].id,
+                batch_code="MED-LIP-23-2310",
+                mfg_date="2023-10-01",
+                expiry_date="2026-10-01",
+                status="Passed",
+            ),
+            models.Batch(
+                shade_id=code_to_shade["11"].id,
+                batch_code="MED-FDT-11-2307",
+                mfg_date="2023-07-05",
+                expiry_date="2026-07-05",
+                status="Passed",
+            ),
+            models.Batch(
+                shade_id=code_to_shade["14"].id,
+                batch_code="MED-FDT-14-2311",
+                mfg_date="2023-11-02",
+                expiry_date="2026-11-02",
+                status="Passed",
+            ),
+            models.Batch(
+                shade_id=code_to_shade["16"].id,
+                batch_code="MED-FDT-16-2203",
+                mfg_date="2022-03-15",
+                expiry_date="2025-03-15",
+                status="Expired",
+            ),
+        ]
+        session.add_all(batches)
+
+        # adds seed data for wishlist + reviews tables
+        # ref: i followed SQLAlchemy "add objects" example (https://docs.sqlalchemy.org/en/20/orm/session_basics.html#adding-and-updating-objects)
         # --- wishlist demo entries ---
         wishlist = [
             models.WishlistItem(
