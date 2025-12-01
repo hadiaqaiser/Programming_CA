@@ -212,6 +212,73 @@ def create_wishlist_item():
         session.close()
 
 
+# explanation: this endpoint returns all reviews filtered by shade_id so frontend can show feedback for each shade
+# source: used SQLAlchemy basic filter pattern from docs https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html
+# commit msg: add GET api for listing reviews by shade_id
+
+@app.get("/api/reviews")
+def list_reviews():
+    shade_id = request.args.get("shade_id")
+    session = get_session()
+    try:
+        q = session.query(models.Review)
+
+        if shade_id:
+            q = q.filter(models.Review.shade_id == int(shade_id))
+
+        rows = q.all()
+        return jsonify([
+            {
+                "id": r.id,
+                "shade_id": r.shade_id,
+                "email": r.email,
+                "rating": r.rating,
+                "comment": r.comment,
+            }
+            for r in rows
+        ])
+    finally:
+        session.close()
+
+
+# this endpoint allows frontend to POST a new review so users can give rating and feedback for any shade
+# source: used Flask request.json pattern from docs https://flask.palletsprojects.com/en/3.0.x/quickstart/#json
+
+@app.post("/api/reviews")
+def create_review():
+    data = request.json or {}
+    email = data.get("email")
+    shade_id = data.get("shade_id")
+    rating = data.get("rating")
+    comment = data.get("comment", "")
+
+    # simple validation
+    if not email or not shade_id or not rating:
+        return jsonify({"error": "missing fields"}), 400
+
+    session = get_session()
+    try:
+        new_review = models.Review(
+            email=email,
+            shade_id=int(shade_id),
+            rating=int(rating),
+            comment=comment
+        )
+
+        session.add(new_review)
+        session.commit()
+
+        return jsonify({
+            "id": new_review.id,
+            "email": new_review.email,
+            "shade_id": new_review.shade_id,
+            "rating": new_review.rating,
+            "comment": new_review.comment
+        }), 201
+    finally:
+        session.close()
+
+
 # this only runs if i do: python app.py (optional)
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5001)
