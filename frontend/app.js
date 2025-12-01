@@ -203,3 +203,9 @@ function deleteWishlistRow(i) {
 function addToWishlistQuick(shadeName) {
   alert("saved " + shadeName + " to wishlist (frontend demo)");
 }
+
+
+// this makes sure my wishlist data is loaded as soon as html is ready so table is not empty when student opens MedoraCare page.
+// source: using DOMContentLoaded from MDN event docs: https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event
+
+window.addEventListener("DOMContentLoaded", loadWishlistFromApi);
