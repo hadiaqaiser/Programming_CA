@@ -54,6 +54,8 @@ async function getRecs() {
 // just empty array now, later i will push wishlist items here
 let wishlistData = [];
 
+// keep review rows in a simple array so i can redraw the review table after each api call
+let reviewData = [];
 
 // function for dropdown when user change category (foundation/lipstick)
 function updateColorOptions() {
