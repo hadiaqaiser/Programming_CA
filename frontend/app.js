@@ -78,9 +78,9 @@ function updateColorOptions() {
       colorSelect.appendChild(o);
     });
 
-  // else if category is lipstick → show Red/Pink/Brown
+    // else if category is lipstick → show Red/Pink/Brown
   } else if (cat === "lipstick") {
-    ["Red","Pink","Brown"].forEach(fam => {
+    ["Red", "Pink", "Brown"].forEach(fam => {
       const o = document.createElement("option");
       o.value = fam;
       o.textContent = fam;
@@ -134,12 +134,12 @@ async function checkAuth() {
 }
 
 //wishlist added using local array, can add and delete items now
-function fakeAddWishlist(){
+function fakeAddWishlist() {
   const email = document.getElementById("wishEmail").value.trim();
   const shadeId = document.getElementById("wishShadeId").value.trim();
   const note = document.getElementById("wishNote").value.trim();
 
-  if(!email || !shadeId){
+  if (!email || !shadeId) {
     alert("email and shade needed");
     return;
   }
@@ -148,7 +148,31 @@ function fakeAddWishlist(){
   renderWishlistTable();
 }
 
-function renderWishlistTable(){
+// when page loads i want to pull existing wishlist rows from flask api n keep them inside my local wishlistData array so table shows real db data.
+// Ref: Followed basic fetch GET example from MDN docs: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+async function loadWishlistFromApi() {
+  try {
+    const res = await fetch(`${API}/api/wishlist`);
+    if (!res.ok) {
+      console.error("wishlist GET failed", res.status);
+      return;
+    }
+    const data = await res.json();
+    // overwrite local array with data from server
+    wishlistData = data.map(row => ({
+      email: row.email,
+      shadeId: row.shade_id,
+      note: row.note || ""
+    }));
+    renderWishlistTable();
+  } catch (err) {
+    console.error("wishlist GET error", err);
+  }
+}
+
+
+function renderWishlistTable() {
   const tbody = document.getElementById("wishTableBody");
   tbody.innerHTML = "";
 
@@ -171,10 +195,11 @@ function renderWishlistTable(){
   });
 }
 
-function deleteWishlistRow(i){
-  wishlistData.splice(i,1);
+function deleteWishlistRow(i) {
+  wishlistData.splice(i, 1);
   renderWishlistTable();
 }
 
-function addToWishlistQuick(shadeName){
-  alert("saved " + shadeName + " to wishlist (frontend demo)");}
+function addToWishlistQuick(shadeName) {
+  alert("saved " + shadeName + " to wishlist (frontend demo)");
+}
