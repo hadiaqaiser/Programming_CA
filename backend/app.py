@@ -65,6 +65,65 @@ def list_shades():
     finally:
         session.close()
 
+# batch check endpoint. frontend sends batch_code and i search batches table
+# ref: https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html#selecting-orm-entities
+
+
+@app.get("/api/auth/check")
+def check_batch():
+    code = request.args.get("batch_code", "").strip()
+
+    if not code:
+        # bad request if user didnt send anything
+        return jsonify({"authentic": False, "error": "batch_code missing"}), 400
+
+    session = get_session()
+    try:
+        batch = (
+            session.query(models.Batch)
+            .filter(models.Batch.batch_code == code)
+            .first()
+        )
+
+        # if no batch found → mark as not authentic
+        if batch is None:
+            return jsonify({"authentic": False}), 200
+
+        shade = session.query(models.Shade).get(batch.shade_id)
+        product = (
+            session.query(models.Product).get(
+                shade.product_id) if shade else None
+        )
+
+        # shape of response matches what my frontend app.js expects
+        return jsonify(
+            {
+                "authentic": True,
+                "status": batch.status,
+                "product_name": product.name if product else None,
+                "batch_info": {
+                    "id": batch.id,
+                    "shade_id": batch.shade_id,
+                    "batch_code": batch.batch_code,
+                    "mfg_date": batch.mfg_date,
+                    "expiry_date": batch.expiry_date,
+                    "status": batch.status,
+                },
+                "shade_info": {
+                    "id": shade.id if shade else None,
+                    "product_id": shade.product_id if shade else None,
+                    "product_name": product.name if product else None,
+                    "shade_code": shade.shade_code if shade else None,
+                    "shade_name": shade.shade_name if shade else None,
+                    "finish": shade.finish if shade else None,
+                    "color_family": shade.color_family if shade else None,
+                    "msrp": shade.msrp if shade else None,
+                },
+            }
+        )
+    finally:
+        session.close()
+
 
 # this only runs if i do: python app.py (optional)
 if __name__ == "__main__":
