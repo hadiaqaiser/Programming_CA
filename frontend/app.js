@@ -279,6 +279,54 @@ function addToWishlistQuick(shadeName) {
   alert("saved " + shadeName + " to wishlist (frontend demo)");
 }
 
+// sends a new review to flask backend and reloads review table
+// source: mdn fetch POST json example
+
+async function submitReview() {
+  const shadeId = document.getElementById("reviewShadeId").value.trim();
+  const email = document.getElementById("reviewEmail").value.trim();
+  const rating = document.getElementById("reviewRating").value;
+  const comment = document.getElementById("reviewComment").value.trim();
+
+  if (!shadeId || !email || !rating) {
+    alert("please fill shade id, email and rating");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/reviews`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        shade_id: parseInt(shadeId, 10),
+        email: email,
+        rating: parseInt(rating, 10),
+        comment: comment,
+      }),
+    });
+
+    if (!res.ok) {
+      console.error("review POST failed", res.status);
+      alert("could not save review (backend error)");
+      return;
+    }
+
+    // reload reviews for same shade
+    await loadReviewsForShade();
+
+    // clear fields except shade id
+    document.getElementById("reviewEmail").value = "";
+    document.getElementById("reviewRating").value = "";
+    document.getElementById("reviewComment").value = "";
+  } catch (err) {
+    console.error("review POST error", err);
+    alert("network problem while saving review");
+  }
+}
+
+
+
+
 
 // this makes sure my wishlist data is loaded as soon as html is ready so table is not empty when student opens MedoraCare page.
 // source: using DOMContentLoaded from MDN event docs: https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event
