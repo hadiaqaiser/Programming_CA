@@ -133,8 +133,10 @@ async function checkAuth() {
   authArea.style.display = "block";
 }
 
-//wishlist added using local array, can add and delete items now
-function fakeAddWishlist() {
+// now instead of only updating local array i also send the wishlist item to my flask backend so it is stored in sqlite and will load next time too.
+// source: i used MDN fetch POST example with JSON body: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options
+
+async function fakeAddWishlist() {
   const email = document.getElementById("wishEmail").value.trim();
   const shadeId = document.getElementById("wishShadeId").value.trim();
   const note = document.getElementById("wishNote").value.trim();
@@ -144,8 +146,41 @@ function fakeAddWishlist() {
     return;
   }
 
-  wishlistData.push({ email, shadeId, note });
-  renderWishlistTable();
+  try {
+    const res = await fetch(`${API}/api/wishlist`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        shade_id: parseInt(shadeId, 10),
+        note: note,
+      }),
+    });
+
+    if (!res.ok) {
+      alert("could not save wishlist item (backend error)");
+      console.error("wishlist POST failed", res.status);
+      return;
+    }
+
+    const saved = await res.json();
+
+    // keep local array in sync with db
+    wishlistData.push({
+      email: saved.email,
+      shadeId: saved.shade_id,
+      note: saved.note || "",
+    });
+    renderWishlistTable();
+
+    // clear inputs for nicer UX
+    document.getElementById("wishEmail").value = "";
+    document.getElementById("wishShadeId").value = "";
+    document.getElementById("wishNote").value = "";
+  } catch (err) {
+    console.error("wishlist POST error", err);
+    alert("network problem while saving wishlist");
+  }
 }
 
 // when page loads i want to pull existing wishlist rows from flask api n keep them inside my local wishlistData array so table shows real db data.
