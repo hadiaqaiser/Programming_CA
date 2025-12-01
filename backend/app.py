@@ -281,17 +281,21 @@ def create_review():
 # source: based on flask route docs + simple session delete pattern from SQLAlchemy docs https://flask.palletsprojects.com/en/latest/quickstart/#routing SQLAlchemy delete: https://docs.sqlalchemy.org/en/20/orm/session_basics.html#deleting
 
 
+# delete wishlist item by id
 @app.delete("/api/wishlist/<int:item_id>")
 def delete_wishlist(item_id):
     session = get_session()
     try:
         item = session.query(models.WishlistItem).get(item_id)
         if item is None:
-            return jsonify({"error": "wishlist item not found"}), 404
+            return jsonify({"error": "not found"}), 404
 
         session.delete(item)
         session.commit()
-        return jsonify({"deleted": True, "id": item_id})
+        return jsonify({"status": "deleted"})
+    except Exception:
+        session.rollback()
+        return jsonify({"error": "server error"}), 500
     finally:
         session.close()
 
