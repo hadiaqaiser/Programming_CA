@@ -197,52 +197,53 @@ async function loadWishlistFromApi() {
       console.error("wishlist GET failed", res.status);
       return;
     }
+
     const data = await res.json();
-    // overwrite local array with data from server
+
     wishlistData = data.map(row => ({
       email: row.email,
       shadeId: row.shade_id,
       note: row.note || ""
     }));
 
-    // this loads all reviews for the shade id typed in the box and fills reviewData + table using /api/reviews?shade_id=..
-    // source: followed MDN fetch GET example again: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-
-    async function loadReviewsForShade() {
-      const shadeIdInput = document.getElementById("reviewShadeId");
-      const shadeId = shadeIdInput.value.trim();
-
-      if (!shadeId) {
-        alert("please type shade id first");
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API}/api/reviews?shade_id=${encodeURIComponent(shadeId)}`);
-        if (!res.ok) {
-          console.error("reviews GET failed", res.status);
-          alert("could not load reviews (backend error)");
-          return;
-        }
-
-        const data = await res.json();
-
-        // overwrite local review array
-        reviewData = data.map(r => ({
-          email: r.email,
-          rating: r.rating,
-          comment: r.comment || ""
-        }));
-
-        renderReviewTable();
-      } catch (err) {
-        console.error("reviews GET error", err);
-        alert("network problem while loading reviews");
-      }
-    }
     renderWishlistTable();
   } catch (err) {
     console.error("wishlist GET error", err);
+  }
+}
+
+// this loads all reviews for the shade id typed in the box and fills reviewData + table using /api/reviews?shade_id=..
+// source: followed MDN fetch GET example again: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+async function loadReviewsForShade() {
+  const shadeId = document.getElementById("reviewShadeId").value.trim();
+
+  if (!shadeId) {
+    alert("please type shade id first");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/reviews?shade_id=${encodeURIComponent(shadeId)}`);
+    if (!res.ok) {
+      console.error("reviews GET failed", res.status);
+      alert("could not load reviews (backend error)");
+      return;
+    }
+
+    const data = await res.json();
+
+    // overwrite local review array
+    reviewData = data.map(r => ({
+      email: r.email,
+      rating: r.rating,
+      comment: r.comment || ""
+    }));
+
+    renderReviewTable();
+  } catch (err) {
+    console.error("reviews GET error", err);
+    alert("network problem while loading reviews");
   }
 }
 
