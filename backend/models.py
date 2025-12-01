@@ -1,9 +1,11 @@
 # extend imports so i can define more fields (like foreign key and price) for shade table
 from sqlalchemy import Column, Integer, String, ForeignKey
-from backend.db import Base
+from .db import Base
 
 # create product table model with id name and category for medora products
 # source: i asked chatgpt for the column types + __tablename__ pattern, rest idea is mine
+
+
 class Product(Base):
     __tablename__ = "products"
 
@@ -14,8 +16,10 @@ class Product(Base):
     def __repr__(self) -> str:
         # small helper so if i print(product) it look nice
         return f"<Product id={self.id} name={self.name!r} category={self.category!r}>"
-    
+
 # create shade table model linked to product using product_id and store basic shade info
+
+
 class Shade(Base):
     __tablename__ = "shades"
 
@@ -26,12 +30,14 @@ class Shade(Base):
     shade_code = Column(String(10), nullable=False)
     shade_name = Column(String(50), nullable=False)
     finish = Column(String(20), nullable=False)        # Matte / Glowy
-    color_family = Column(String(20), nullable=False)  # Light / Medium / Dark / Red / Pink / Brown
-    msrp = Column(Integer, nullable=False)             # simple int price for now
+    # Light / Medium / Dark / Red / Pink / Brown
+    color_family = Column(String(20), nullable=False)
+    # simple int price for now
+    msrp = Column(Integer, nullable=False)
 
     def __repr__(self) -> str:
         return f"<Shade id={self.id} code={self.shade_code!r} name={self.shade_name!r}>"
-    
+
 
 # create batch table model to store batch code mfg expiry and quality status for each shade
 # source: i used chatgpt for choosing string length and nullable flags but idea comes from my project design
@@ -46,12 +52,14 @@ class Batch(Base):
     batch_code = Column(String(50), nullable=False)
     mfg_date = Column(String(10), nullable=False)      # e.g. "2023-07-05"
     expiry_date = Column(String(10), nullable=False)   # e.g. "2026-07-05"
-    status = Column(String(20), nullable=False)        # e.g. "Passed", "Failed", "Expired"
+    # e.g. "Passed", "Failed", "Expired"
+    status = Column(String(20), nullable=False)
 
     def __repr__(self) -> str:
         return f"<Batch id={self.id} code={self.batch_code!r} status={self.status!r}>"
-    
+
 # create wishlist table so user can save shades they like with email and note
+
 
 class WishlistItem(Base):
     __tablename__ = "wishlist_items"
@@ -67,8 +75,10 @@ class WishlistItem(Base):
 
     def __repr__(self) -> str:
         return f"<WishlistItem id={self.id} shade_id={self.shade_id} email={self.email!r}>"
-    
+
 # create review table so user can leave rating and comment for a shade using email
+
+
 class Review(Base):
     __tablename__ = "reviews"
 

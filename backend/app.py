@@ -1,5 +1,7 @@
-# start small flask app for medoracare project, only add simple /api/ping
-from flask import Flask, jsonify
+# main flask api file for medoracare. here i wire cors, db and all endpoints
+# ref: https://flask.palletsprojects.com/en/3.0.x/quickstart/
+
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 # import my shared db things (engine + Base) and models so tables can be created once
