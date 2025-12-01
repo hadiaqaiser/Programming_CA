@@ -16,6 +16,16 @@ Base.metadata.create_all(bind=engine)
 app = Flask(__name__)
 CORS(app)
 
+Base.metadata.create_all(bind=engine)
+
+# simple test endpoint to see if backend running
+
+
+@app.get("/api/ping")
+def ping():
+    return jsonify({"message": "medoracare api ok"})
+
+
 # shade search endpoint. frontend calls this with category/color/finish filters
 # ref: https://flask.palletsprojects.com/en/3.0.x/quickstart/#accessing-request-data
 
