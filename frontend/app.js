@@ -200,7 +200,9 @@ async function loadWishlistFromApi() {
 
     const data = await res.json();
 
+    // overwrite local array with data from server
     wishlistData = data.map(row => ({
+      id: row.id,          // <-- NEW
       email: row.email,
       shadeId: row.shade_id,
       note: row.note || ""
@@ -264,15 +266,38 @@ function renderWishlistTable() {
       <td>${row.email}</td>
       <td>${row.shadeId}</td>
       <td>${row.note || ""}</td>
-      <td><button onclick="deleteWishlistRow(${index})">X</button></td>
+      <td><button class="btn btn-secondary" onclick="deleteWishlistRow(${row.id})">X</button></td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-function deleteWishlistRow(i) {
-  wishlistData.splice(i, 1);
-  renderWishlistTable();
+// now delete button asks flask api to remove row from sqlite and then reloads fresh wishlist from server
+// source: fetch DELETE pattern from MDN Fetch docs https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options
+
+async function deleteWishlistRow(id) {
+  const ok = confirm("Remove this wishlist item?");
+  if (!ok) {
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/wishlist/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) {
+      console.error("wishlist DELETE failed", res.status);
+      alert("could not delete wishlist item (backend error)");
+      return;
+    }
+
+    // reload from backend so ui matches database
+    await loadWishlistFromApi();
+  } catch (err) {
+    console.error("wishlist DELETE error", err);
+    alert("network problem while deleting wishlist");
+  }
 }
 
 function addToWishlistQuick(shadeName) {
