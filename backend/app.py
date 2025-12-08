@@ -300,6 +300,8 @@ def delete_wishlist(item_id):
         session.close()
 
 
-# this only runs if i do: python app.py (optional)
+    # this only runs if i do: python app.py (optional)
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5001)
+
+    # This runs the Flask server and makes it listen on all network interfaces (0.0.0.0) so EC2 users can access it.
+    app.run(host="0.0.0.0", port=5000, debug=True)
