@@ -257,43 +257,41 @@ def list_reviews():
     finally:
         session.close()
 
-# this endpoint allows frontend to POST a new review so users can give rating and feedback for any shade
-# ref: used Flask request.json pattern from docs https://flask.palletsprojects.com/en/3.0.x/quickstart/#json
 
+# This endpoint allows editing an existing wishlist row instead of creating a new one.
+# Ref: Flask PUT routing + request.get_json https://flask.palletsprojects.com/en/3.0.x/quickstart/#routing https://flask.palletsprojects.com/en/3.0.x/api/#flask.Request.get_json
+@app.put("/api/wishlist/<int:item_id>")
+def update_wishlist_item(item_id):
+    data = request.get_json(silent=True) or {}
 
-@app.post("/api/reviews")
-def create_review():
-    data = request.json or {}
-    email = data.get("email")
+    email = (data.get("email") or "").strip()
     shade_id = data.get("shade_id")
-    rating = data.get("rating")
-    comment = data.get("comment", "")
+    note = (data.get("note") or "").strip()
 
-    # simple validation
-    if not email or not shade_id or not rating:
-        return jsonify({"error": "missing fields"}), 400
+    if not email or not shade_id:
+        return jsonify({"error": "email and shade_id are required"}), 400
 
     session = get_session()
     try:
-        new_review = models.Review(
-            email=email,
-            shade_id=int(shade_id),
-            rating=int(rating),
-            comment=comment
-        )
+        item = session.query(models.WishlistItem).get(item_id)
+        if item is None:
+            return jsonify({"error": "not found"}), 404
 
-        session.add(new_review)
+        item.email = email
+        item.shade_id = int(shade_id)
+        item.note = note or None
+
         session.commit()
 
         return jsonify({
-            "id": new_review.id,
-            "email": new_review.email,
-            "shade_id": new_review.shade_id,
-            "rating": new_review.rating,
-            "comment": new_review.comment
-        }), 201
+            "id": item.id,
+            "email": item.email,
+            "shade_id": item.shade_id,
+            "note": item.note,
+        })
     finally:
         session.close()
+
 
 # allow frontend to delete a wishlist row by id so table and sqlite stay in sync
 # ref: based on flask route docs + simple session delete pattern from SQLAlchemy docs https://flask.palletsprojects.com/en/latest/quickstart/#routing SQLAlchemy delete: https://docs.sqlalchemy.org/en/20/orm/session_basics.html#deleting
