@@ -20,6 +20,10 @@ CORS(app)
 
 Base.metadata.create_all(bind=engine)
 
+# This variable points Flask to the frontend folder so it can serve index.html and static files.
+# Ref: os.path.join usage: https://docs.python.org/3/library/os.path.html#os.path.join
+FRONTEND_FOLDER = os.path.join(os.path.dirname(__file__), "..", "frontend")
+
 # simple test endpoint to see if backend running
 
 
