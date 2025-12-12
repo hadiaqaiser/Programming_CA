@@ -233,6 +233,45 @@ async function fakeAddWishlist() {
   }
 }
 
+// This function updates an existing wishlist item by sending the edited data to the backend using a PUT request instead of creating a new record. */
+//  Ref: MDN Fetch API (PUT request example) https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch 
+
+async function updateWishlistItem(id) {
+  const email = document.getElementById("wishEmail").value.trim();
+  const shadeId = document.getElementById("wishShadeId").value.trim();
+  const note = document.getElementById("wishNote").value.trim();
+
+  if (!email || !shadeId) {
+    alert("email and shade needed");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/wishlist/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        shade_id: parseInt(shadeId, 10),
+        note: note,
+      }),
+    });
+
+    if (!res.ok) {
+      console.error("wishlist PUT failed", res.status);
+      alert("could not update wishlist item (backend error)");
+      return;
+    }
+
+    await loadWishlistFromApi();
+    cancelEditWishlist();
+  } catch (err) {
+    console.error("wishlist PUT error", err);
+    alert("network problem while updating wishlist");
+  }
+}
+
+
 // when page loads i want to pull existing wishlist rows from flask api n keep them inside my local wishlistData array so table shows real db data.
 // Ref: Followed basic fetch GET example from MDN docs: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
