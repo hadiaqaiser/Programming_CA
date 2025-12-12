@@ -24,6 +24,22 @@ Base.metadata.create_all(bind=engine)
 # Ref: os.path.join usage: https://docs.python.org/3/library/os.path.html#os.path.join
 FRONTEND_FOLDER = os.path.join(os.path.dirname(__file__), "..", "frontend")
 
+# These routes let EC2 open the UI in browser (/) and load frontend files like app.js/style.css.
+# Ref: Flask routing + send_from_directory: https://flask.palletsprojects.com/en/3.0.x/quickstart/#routing https://flask.palletsprojects.com/en/3.0.x/api/#flask.send_from_directory
+
+
+@app.get("/")
+@app.get("/")
+def serve_index():
+    # serves frontend/index.html
+    return send_from_directory(FRONTEND_FOLDER, "index.html")
+
+
+@app.get("/<path:filename>")
+def serve_static_files(filename):
+    # serves frontend/style.css, frontend/app.js, etc.
+    return send_from_directory(FRONTEND_FOLDER, filename)
+
 # simple test endpoint to see if backend running
 
 
