@@ -179,6 +179,12 @@ async function checkAuth() {
 // source: i used MDN fetch POST example with JSON body: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options
 
 async function fakeAddWishlist() {
+  // This logic allows the same submit button to either add a new wishlist item or update an existing one based on whether an item is in edit mode
+  // Ref: ChatGPT + MDN Fetch API & conditional logic  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch 
+  if (editingWishlistId) {
+    await updateWishlistItem(editingWishlistId);
+    return;
+  }
   const email = document.getElementById("wishEmail").value.trim();
   const shadeId = document.getElementById("wishShadeId").value.trim();
   const note = document.getElementById("wishNote").value.trim();
