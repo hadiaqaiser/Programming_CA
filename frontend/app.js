@@ -338,19 +338,23 @@ function renderWishlistTable() {
   const tbody = document.getElementById("wishTableBody");
   tbody.innerHTML = "";
 
+  // This updates the wishlist table to show both Edit and Delete actions for each row so users can modify existing entries
+  // Ref: MDN DOM manipulation (buttons & event handling)  https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+
   if (wishlistData.length === 0) {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="4">wishlist empty</td>`;
+    tr.innerHTML = `<td colspan="5">wishlist empty</td>`;
     tbody.appendChild(tr);
     return;
   }
 
-  wishlistData.forEach((row, index) => {
+  wishlistData.forEach((row) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${row.email}</td>
       <td>${row.shadeId}</td>
       <td>${row.note || ""}</td>
+      <td><button class="btn btn-outline" onclick="startEditWishlist(${row.id})">Edit</button></td>
       <td><button class="btn btn-secondary" onclick="deleteWishlistRow(${row.id})">X</button></td>
     `;
     tbody.appendChild(tr);
