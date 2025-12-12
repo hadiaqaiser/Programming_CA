@@ -1,4 +1,5 @@
-const API = "http://127.0.0.1:5001";
+// Changing API base URL to empty string so frontend calls same host/port (works when Flask serves frontend on EC2)
+const API = "";
 
 //shade finder that calls backend /api/shades instead of local mockShades
 async function getRecs() {
