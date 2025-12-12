@@ -58,6 +58,45 @@ let wishlistData = [];
 // keep review rows in a simple array so i can redraw the review table after each api call
 let reviewData = [];
 
+
+// This part adds edit/update mode for wishlist items so the same form can be used to update an existing record instead of only adding new ones. */
+// Ref: I have used ChatGPT and basic DOM handling concepts from MDN JavaScript documentation https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById 
+let editingWishlistId = null;
+
+function setWishlistMode(isEdit) {
+  const submitBtn = document.getElementById("wishSubmitBtn");
+  const cancelBtn = document.getElementById("wishCancelBtn");
+
+  if (isEdit) {
+    if (submitBtn) submitBtn.textContent = "Update";
+    if (cancelBtn) cancelBtn.style.display = "inline-block";
+  } else {
+    if (submitBtn) submitBtn.textContent = "Add";
+    if (cancelBtn) cancelBtn.style.display = "none";
+    editingWishlistId = null;
+  }
+}
+
+function startEditWishlist(itemId) {
+  const row = wishlistData.find((x) => x.id === itemId);
+  if (!row) return;
+
+  editingWishlistId = itemId;
+
+  document.getElementById("wishEmail").value = row.email;
+  document.getElementById("wishShadeId").value = row.shadeId;
+  document.getElementById("wishNote").value = row.note || "";
+
+  setWishlistMode(true);
+}
+
+function cancelEditWishlist() {
+  document.getElementById("wishEmail").value = "";
+  document.getElementById("wishShadeId").value = "";
+  document.getElementById("wishNote").value = "";
+  setWishlistMode(false);
+}
+
 // function for dropdown when user change category (foundation/lipstick)
 function updateColorOptions() {
   const cat = document.getElementById("recCategory").value;
