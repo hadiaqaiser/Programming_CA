@@ -1,7 +1,9 @@
 # main flask api file for medoracare. here i wire cors, db and all endpoints
 # ref: https://flask.palletsprojects.com/en/3.0.x/quickstart/
 
-from flask import Flask, jsonify, request
+# I added os + send_from_directory so Flask can serve my frontend files (index.html, style.css, app.js) from the same server on EC2.
+import os
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 # import my shared db things (engine + Base) and models so tables can be created once
@@ -28,8 +30,6 @@ def ping():
 
 # shade search endpoint. frontend calls this with category/color/finish filters
 # ref: https://flask.palletsprojects.com/en/3.0.x/quickstart/#accessing-request-data
-
-
 @app.get("/api/shades")
 def list_shades():
     # read query params from url, e.g. ?category=foundation&color_family=Light
@@ -135,7 +135,7 @@ def check_batch():
         session.close()
 
 # small api to list all wishlist rows so later my frontend can show them from real db
-# source: used basic sqlalchemy query pattern from https://docs.sqlalchemy.org/en/20/orm/quickstart.html#simple-select
+# ref: used basic sqlalchemy query pattern from https://docs.sqlalchemy.org/en/20/orm/quickstart.html#simple-select
 
 
 @app.get("/api/wishlist")
@@ -167,7 +167,7 @@ def get_wishlist():
         session.close()
 
 # this api takes email + shade_id + note from frontend and creates a new wishlist row
-# source: followed flask json pattern from https://flask.palletsprojects.com/en/3.0.x/api/#flask.Request.get_json
+# ref: followed flask json pattern from https://flask.palletsprojects.com/en/3.0.x/api/#flask.Request.get_json
 
 
 @app.post("/api/wishlist")
@@ -213,8 +213,7 @@ def create_wishlist_item():
 
 
 # this endpoint returns all reviews filtered by shade_id so frontend can show feedback for each shade
-# source: used SQLAlchemy basic filter pattern from docs https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html
-
+# ref: used SQLAlchemy basic filter pattern from docs https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html
 @app.get("/api/reviews")
 def list_reviews():
     shade_id = request.args.get("shade_id")
@@ -239,9 +238,9 @@ def list_reviews():
     finally:
         session.close()
 
-
 # this endpoint allows frontend to POST a new review so users can give rating and feedback for any shade
-# source: used Flask request.json pattern from docs https://flask.palletsprojects.com/en/3.0.x/quickstart/#json
+# ref: used Flask request.json pattern from docs https://flask.palletsprojects.com/en/3.0.x/quickstart/#json
+
 
 @app.post("/api/reviews")
 def create_review():
@@ -278,7 +277,7 @@ def create_review():
         session.close()
 
 # allow frontend to delete a wishlist row by id so table and sqlite stay in sync
-# source: based on flask route docs + simple session delete pattern from SQLAlchemy docs https://flask.palletsprojects.com/en/latest/quickstart/#routing SQLAlchemy delete: https://docs.sqlalchemy.org/en/20/orm/session_basics.html#deleting
+# ref: based on flask route docs + simple session delete pattern from SQLAlchemy docs https://flask.palletsprojects.com/en/latest/quickstart/#routing SQLAlchemy delete: https://docs.sqlalchemy.org/en/20/orm/session_basics.html#deleting
 
 
 # delete wishlist item by id
