@@ -38,14 +38,13 @@ def serve_index():
 @app.get("/<path:filename>")
 def serve_static_files(filename):
     # serves frontend/style.css, frontend/app.js, etc.
+    return send_from_directory(FRONTEND_FOLDER, "index.html")
+
+
+@app.get("/<path:filename>")
+def serve_static_files(filename):
+    # serves frontend/style.css, frontend/app.js
     return send_from_directory(FRONTEND_FOLDER, filename)
-
-# simple test endpoint to see if backend running
-
-
-@app.get("/api/ping")
-def ping():
-    return jsonify({"message": "medoracare api ok"})
 
 
 # shade search endpoint. frontend calls this with category/color/finish filters
@@ -317,7 +316,6 @@ def delete_wishlist(item_id):
         return jsonify({"error": "server error"}), 500
     finally:
         session.close()
-
 
     # this only runs if i do: python app.py (optional)
 if __name__ == "__main__":
