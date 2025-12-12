@@ -29,7 +29,6 @@ FRONTEND_FOLDER = os.path.join(os.path.dirname(__file__), "..", "frontend")
 
 
 @app.get("/")
-@app.get("/")
 def serve_index():
     # serves frontend/index.html
     return send_from_directory(FRONTEND_FOLDER, "index.html")
@@ -38,13 +37,14 @@ def serve_index():
 @app.get("/<path:filename>")
 def serve_static_files(filename):
     # serves frontend/style.css, frontend/app.js, etc.
-    return send_from_directory(FRONTEND_FOLDER, "index.html")
-
-
-@app.get("/<path:filename>")
-def serve_static_files(filename):
-    # serves frontend/style.css, frontend/app.js
     return send_from_directory(FRONTEND_FOLDER, filename)
+
+# simple test endpoint to see if backend running
+
+
+@app.get("/api/ping")
+def ping():
+    return jsonify({"message": "medoracare api ok"})
 
 
 # shade search endpoint. frontend calls this with category/color/finish filters
