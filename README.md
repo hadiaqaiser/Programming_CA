@@ -70,18 +70,27 @@ MEDORACARE_PROJECT/
 └── README.md                    # Project documentation
 
 ⚙️ Local Setup
-	•	python3 -m venv venv
-	•	source venv/bin/activate
-	•	pip install flask sqlalchemy
-	•	python3 -m backend.app
+•	python3 -m venv venv
+•	source venv/bin/activate
+•	pip install flask sqlalchemy
+•	python3 -m backend.app
 
 ☁️ AWS Deployment
-	•	Created AWS EC2 Linux instance
-	•	Enabled SSH (security group)
-	•	Connected using SSH key
-	•	Installed Python, SQLite & dependencies
-	•	Ran Flask app on EC2
-	•	Frontend is served via Flask from EC2 and backend APIs with SQLite are also hosted and        executed on same EC2 machine.
+•	Created AWS EC2 Linux instance
+•	Enabled SSH (security group)
+•	Connected using SSH key
+•	Installed Python, SQLite & dependencies
+•	Ran Flask app on EC2
+•	Frontend is served via Flask from EC2 and backend APIs with SQLite are also hosted and executed on same EC2 machine.
+
+🖱️ Commands used to run this App
+•	cd Downloads (Open Terminal, Change directory to Downloads)
+•	ssh -i ~/Downloads/medoracare-ec2-key.pem ec2-user@34.247.14.89 (SSH into EC2 Instance using key and Elastic IP)
+•	source ~/venv/bin/activate (Activate Virtual Environment)
+•	cd ~/Programming_CA (Changing directory to Project Folder)
+•	python3 -m backend.app (Starting my backend)
+•	Running on http://34.247.14.89:5000 (Open this link)
+
 
 
 ## Reference: I have used Chrome and AI to enhance the wording of my README file.
