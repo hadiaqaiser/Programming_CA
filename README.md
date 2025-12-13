@@ -1,18 +1,87 @@
-# Programming_CA
+	•	Student Name: Hadia Qaiser
+	•	Student ID: 20069602
+	•	Programme: MSc Information Systems
+	•	Lecturer Name: Paul Laird
+	•	Module Title: Programming for Information Systems
+	•	Assignment Title: CA2 
+	•	Project Title:  Medoracare - Product Authenticity and Shade Finder System.
+	•	Google Doc link: https://docs.google.com/document/d/1oOD6VhoLN43uevyR00IGfuGkrU4cxDFAR3OW6NCP1kg/edit?usp=sharing
 
-Student Name: Hadia Qaiser
-Student ID: 20069602
-Programme: MSc Information Systems
-Lecturer Name: Paul Laird
-Module Title: Programming for Information Systems
-Assignment Title:  Medora - Product Authenticity and Shade Finder System.
+📒 Description:
+This project is for a small Pakistani local company "Medora of London". The company sells widely across Pakistan but lacks an online system to help customers verify originality or choose the correct shade. The indivituality of this project is based on this gap, this system combine simple design with real use idea, showing how users can check product real or fake and find perfect shade in one small system.
 
-Description
-This project is for a small Pakistani company "Medora". The indivituality of this project is that it mix simple design with real use idea, showing how users can check product real or fake and find perfect shade in one small system.
+💄 Web App Name: MedoraCare
+A full-stack web application built using Flask, SQLite, HTML, CSS, and JavaScript, and deployed on AWS EC2. The project simulates a cosmetics platform with shade finder, product authenticity check, wishlist, and reviews.
 
-CA1
-Frontend part: include HTML, CSS, and JS. 
-Users can check fake or real product (sample only), find perfect shade, and add to small wishlist. 
+🚀 Features
+	•	Shade finder
+	•	Product Authenticity (batch) check
+	•	Wishlist management
+	•	Product reviews
 
-Ca2
-Backend and real data. Python (Flask) and Sqlite.
+🛠 Language/Tool used
+Frontend
+	•	HTML5
+	•	CSS3
+	•	JavaScript (Fetch API)
+
+Backend
+	•	Python 3
+	•	Flask (REST APIs)
+	•	SQLAlchemy (ORM)
+
+Database
+	•	SQLite (development)
+
+Tools & Cloud
+	•	VS Code
+	•	GitHub
+	•	AWS EC2 (Linux)
+	•	SSH (key-based access)
+
+📁 Project Structure
+MEDORACARE_PROJECT/
+│
+├── backend/                     # Flask backend
+│   ├── app.py                   # Main Flask application (API routes)
+│   ├── db.py                    # Database connection & configuration
+│   ├── models.py                # SQLAlchemy database models
+│   ├── seed.py                  # Script to insert sample data
+│   └── medora.db                # SQLite database file
+│
+├── frontend/                    # Frontend files
+│   ├── app.js                   # JavaScript logic (API calls)
+│   ├── config.json              # Backend API configuration
+│   ├── index.html               # Main UI page
+│   └── style.css                # Styling for the UI
+│
+├── tests/                       # Unit and integration tests
+│   ├── test_ping.py             # API health check test
+│   ├── test_models_product.py   # Product model tests
+│   ├── test_models_batch.py     # Batch/authenticity tests
+│   ├── test_models_shade.py     # Shade model tests
+│   ├── test_models_review.py    # Review model tests
+│   └── test_models_wishlist.py  # Wishlist model tests
+│
+├── venv/                        # Python virtual environment (All files inside were craeted by default)
+├── __init__.py                  # Project initializer
+├── requirements.txt             # Python dependencies
+├── .gitignore                   # Ignored files for Git (Such as all venv files)
+└── README.md                    # Project documentation
+
+⚙️ Local Setup
+	•	python3 -m venv venv
+	•	source venv/bin/activate
+	•	pip install flask sqlalchemy
+	•	python3 -m backend.app
+
+☁️ AWS Deployment
+	•	Created AWS EC2 Linux instance
+	•	Enabled SSH (security group)
+	•	Connected using SSH key
+	•	Installed Python, SQLite & dependencies
+	•	Ran Flask app on EC2
+	•	Frontend is served via Flask from EC2 and backend APIs with SQLite are also hosted and        executed on same EC2 machine.
+
+
+## Reference: I have used Chrome and AI to enhance the wording of my README file.
