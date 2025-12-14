@@ -91,6 +91,13 @@ MEDORACARE_PROJECT/
 •	python3 -m backend.app (Starting my backend)
 •	Running on http://34.247.14.89:5000 (Open this link)
 
+⚙️API Routes
+This project uses Flask API routes to connect the frontend (HTML/JS/CSS) with the backend Flask and SQLite.
+•	GET /api/ping – Backend health check
+•	GET /api/shades – Fetch shades with filters
+•	GET /api/auth/check – Verify product authenticity
+•	GET / POST / PUT / DELETE /api/wishlist – Wishlist CRUD operations
+•	GET / POST /api/reviews – Manage product reviews
 
 
 ## Reference: I have used Chrome and AI to enhance the wording of my README file.
